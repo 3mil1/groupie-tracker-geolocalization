@@ -1,0 +1,14 @@
+{{define "main"}}
+<div class="cardContainer">
+    {{range .}}
+    <div class="card">
+        <a href="/artist?id={{.ID}}">
+            <img src={{.Image}} alt="Avatar" style="width:100%">
+            <div class="container">
+                <h4><b>{{.Name}}</b></h4>
+            </div>
+        </a>
+    </div>
+    {{end}}
+</div>
+{{end}}

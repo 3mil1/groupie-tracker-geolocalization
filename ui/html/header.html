@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{{ define "header" }}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel='stylesheet' href='/fileServer/static/css/style.css'>
+    <script src="https://kit.fontawesome.com/afd6aa68df.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="header">
+    <div class="header_center">
+        <a href="/"><p class="title">&lt;Groupie-Tracker&gt;</p></a>
+    </div>
+
+    <div class="header_right">
+        {{template "search-bar" .}}
+    </div>
+
+</div>
+{{end}}

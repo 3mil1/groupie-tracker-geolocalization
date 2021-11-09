@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  my-service:
+    container_name: server
+    build:
+      context: ../groupie-tracker
+      target: dev
+    volumes:
+      - .:/app:rw,delegated
+    networks:
+      - my_network
+    ports:
+      - "8080:8080"
+networks:
+  my_network:
+    name: my_network
