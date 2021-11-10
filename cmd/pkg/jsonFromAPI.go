@@ -21,6 +21,6 @@ func JsonFromAPI(URL string, str interface{}) {
 	body, err := ioutil.ReadAll(resp.Body) // response body is []byte
 
 	if err := json.Unmarshal(body, str); err != nil { // Parse []byte to the go struct pointer
-		fmt.Println("Can not unmarshal JSON")
+		fmt.Println("Can not unmarshal JSON", URL)
 	}
 }

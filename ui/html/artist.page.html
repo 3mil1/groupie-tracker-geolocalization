@@ -4,47 +4,32 @@
 
 <div id="gradient"></div>
 <div id="card-artist">
-
-    {{ with $n := index . 0 }}
-    <img src="{{ $n.Image }}" alt="">
+    <img src="{{ .Image }}" alt="">
     <div class="content">
-    <h1>{{ $n.Name }}</h1>
-    <p>Established {{ $n.CreationDate}}</p>
-    {{ if ne (len $n.Members) 1 }}
-    <h2>Members</h2>
-    {{ range $i, $v := $n.Members }}
-    <p>{{$v}}</p>
-    {{end}}
-    {{end}}
-    {{end}}
-   
-    <div>
-        <h2>Best Concerts</h2>
-        {{ with $n := index . 1 }}
-        {{ range $location, $date := $n.DatesLocations }}
-        <p><strong>{{ $location }}</strong>:</p>
-    
-        <ul>
-            {{ range $i, $v := $date }}
-            <li>{{$v}}</li>
-            {{end}}
-        </ul>
-        {{ end }}
-        {{ end }}
+        <h1>{{ .Name }}</h1>
+        <p>Established {{ .CreationDate}}</p>
+
+        {{ if ne (len .Members) 1 }}
+        <h2>Members</h2>
+        {{ range $i, $v := .Members }}
+        <p>{{$v}}</p>
+        {{end}}
+        {{end}}
+
+
+        <div>
+            <h2>Best Concerts</h2>
+            {{ range $location, $date := .DatesLocations }}
+            <p><strong>{{ $location }}</strong>:</p>
+
+            <ul>
+                {{ range $i, $v := $date }}
+                <li>{{$v}}</li>
+                {{end}}
+            </ul>
+            {{ end }}
+        </div>
     </div>
 </div>
-</div>
-
-
-<script>
-    // Press Q to see popup with artist's name
-    document.addEventListener("keypress", function (event) {
-        let artist = document.querySelector("h1").textContent
-        if (event.code === "KeyQ") {
-            alert("Artist - " + artist)
-        }
-    })
-</script>
-
 {{ template "footer" }}
 {{ end }}

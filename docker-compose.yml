@@ -3,7 +3,7 @@ services:
   my-service:
     container_name: server
     build:
-      context: ../groupie-tracker
+      context: ./
       target: dev
     volumes:
       - .:/app:rw,delegated

@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"regexp"
-	"server/cmd/pkg"
 	"strconv"
 	"strings"
 )
@@ -20,8 +19,6 @@ func home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pkg.JsonFromAPI("https://groupietrackers.herokuapp.com/api/artists", &artists)
-
 	err := r.ParseForm()
 	if err != nil {
 		fmt.Println(err)
@@ -30,7 +27,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(key, value)
 	}
 
-	err = templates.ExecuteTemplate(w, "index", artists)
+	err = templates.ExecuteTemplate(w, "index", &artistsRelation)
 	if err != nil {
 		log.Println(err.Error())
 		http.Error(w, "Internal Server Error", 500)
@@ -45,20 +42,9 @@ func artistPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for i := range relation.DatesLocations {
-		delete(relation.DatesLocations, i)
-	}
+	changeKeyInMap(artistsRelation[id-1].DatesLocations)
 
-	pkg.JsonFromAPI(artists[id-1].Relations, &relation)
-
-	changeKeyInMap(relation.DatesLocations)
-
-	artistWRelation := []interface{}{
-		artists[id-1],
-		relation,
-	}
-
-	err = templates.ExecuteTemplate(w, "artist", artistWRelation)
+	err = templates.ExecuteTemplate(w, "artist", artistsRelation[id-1])
 	if err != nil {
 		log.Println(err.Error())
 		http.Error(w, "Internal Server Error", 500)
@@ -66,6 +52,7 @@ func artistPage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// from los_angeles-usa to Los Angeles - Usa:
 func changeKeyInMap(dataMap map[string][]string) {
 	space := regexp.MustCompile(`\s+`)
 
@@ -78,19 +65,9 @@ func changeKeyInMap(dataMap map[string][]string) {
 }
 
 func search(w http.ResponseWriter, r *http.Request) {
-	s := make(map[int]string)
-
-	pkg.JsonFromAPI("https://groupietrackers.herokuapp.com/api/artists", &artists)
-
 	switch r.Method {
 	case "GET":
-		a := r.URL.Query().Get("a")
-
-		for _, r := range artists {
-			if strings.HasPrefix(strings.ToLower(r.Name), strings.ToLower(a)) {
-				s[r.ID] = r.Name
-			}
-		}
+		userInput := r.URL.Query().Get("a")
+		json.NewEncoder(w).Encode(searchInsideStruct(artistsRelation, userInput))
 	}
-	json.NewEncoder(w).Encode(s)
 }

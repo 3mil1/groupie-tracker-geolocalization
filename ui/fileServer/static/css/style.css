@@ -16,6 +16,8 @@ h4 {
 }
 
 .header_center {
+    display: flex;
+    justify-content: center;
     flex: 1;
 }
 
@@ -25,7 +27,7 @@ h4 {
     flex: 0;
 }
 
-.header p {
+.logo {
     margin-top: 0;
     margin-bottom: 0;
     text-align: center;

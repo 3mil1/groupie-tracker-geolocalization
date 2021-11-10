@@ -2,6 +2,7 @@ const searchWrapper = document.querySelector(".search-input");
 const inputBox = searchWrapper.querySelector("input");
 const suggBox = searchWrapper.querySelector(".autocomplete");
 
+
 inputBox.onkeyup = async (e) => {
     let userData = e.target.value;
     if (userData) {
@@ -24,10 +25,8 @@ function suggestions(data) {
 
     suggBox.innerHTML = ""
 
-
     for (const [key, value] of Object.entries(data)) {
         let listItem = document.createElement('li');
-        listItem.id = key
         listItem.setAttribute("onclick", "select(" + key + ")");
         listItem.innerHTML = value;
         suggBox.appendChild(listItem);
