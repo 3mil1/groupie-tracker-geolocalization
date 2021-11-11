@@ -264,6 +264,19 @@ and (orientation: landscape) {
     border-radius: 10px;
 }
 
+.box input:focus {
+    width: 350px;
+    background: #272133;
+    border-radius: 10px;
+}
+
+/*.box input:valid {*/
+/*    width: 350px;*/
+/*    background: #272133;*/
+/*    border-radius: 10px;*/
+/*}*/
+
+
 i {
     position: absolute;
     /*top: 50%;*/

@@ -18,7 +18,6 @@ func searchInsideStruct(artists []ArtistsRelation, userInput string) []interface
 	//if !isResult {
 	returnValSUG = suggestion(artists, userInput)
 	//}
-
 	returnVal = append(returnVal, returnValRES)
 	returnVal = append(returnVal, returnValSUG)
 
@@ -77,12 +76,23 @@ func suggestion(artists []ArtistsRelation, userInput string) []string {
 		}
 
 		for _, member := range r.Members {
-			sliceOfName := strings.Fields(member)
-			for _, name := range sliceOfName {
-				if strings.HasPrefix(strings.ToLower(strings.TrimSpace(name)), strings.ToLower(userInput)) {
-					m = append(m, member)
+			if !(userInput == member) {
+				if strings.Contains(strings.ToLower(strings.TrimSpace(member)), strings.ToLower(userInput)) {
+
+					if strings.Index(strings.ToLower(strings.TrimSpace(member)), strings.ToLower(userInput)) > 1 {
+						if string(member[strings.Index(strings.ToLower(strings.TrimSpace(member)), strings.ToLower(userInput))-1]) == " " {
+							m = append(m, member)
+						}
+					}
+
+					if strings.Index(strings.ToLower(strings.TrimSpace(member)), strings.ToLower(userInput)) < 1 {
+						if strings.Contains(strings.ToLower(strings.TrimSpace(member)), strings.ToLower(userInput)) {
+							m = append(m, member)
+						}
+					}
 				}
 			}
+
 		}
 
 		if strings.HasPrefix(strings.ToLower(strings.TrimSpace(strconv.Itoa(r.CreationDate))), strings.ToLower(userInput)) {
