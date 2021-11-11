@@ -285,6 +285,7 @@ i {
     pointer-events: none;
     max-height: 280px;
     overflow-y: auto;
+    background: #555;
 }
 
 .search-input.active .autocomplete {
@@ -302,7 +303,6 @@ i {
     width: 100%;
     cursor: default;
     /*border-radius: 3px;*/
-    background: #555;
 }
 
 .search-input.active .autocomplete li {
@@ -311,4 +311,8 @@ i {
 
 .autocomplete li:hover {
     background: #343434;
+}
+
+.didMean {
+    color: white;
 }
