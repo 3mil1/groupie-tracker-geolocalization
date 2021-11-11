@@ -2,11 +2,11 @@ const searchWrapper = document.querySelector(".search-input");
 const inputBox = searchWrapper.querySelector("input");
 const suggBox = searchWrapper.querySelector(".autocomplete");
 
-
+let userInput
 inputBox.onkeyup = async (e) => {
-    let userData = e.target.value;
-    if (userData) {
-        await fetch('/search?a=' + userData)
+    userInput = e.target.value;
+    if (userInput) {
+        await fetch('/search?a=' + userInput)
             .then(function (response) {
                 // The response is a Response instance.
                 // You parse the data into a usable format using `.json()`
@@ -38,23 +38,27 @@ function suggestions(data) {
             }
         } else {
             // Did you mean: text
-            let p = document.createElement('p')
-            p.innerText = "Did you mean: "
-            p.className = "didMean"
-            suggBox.appendChild(p)
 
-            arr = []
-            data.forEach((value, i) => {
-                let listItem = document.createElement('li');
-                listItem.setAttribute("onclick", `suggestion("` + value + `")`);
-                listItem.innerHTML = value;
+            if (userInput !== data[0]) {
+                let p = document.createElement('p')
+                p.innerText = "Did you mean: "
+                p.className = "didMean"
+                suggBox.appendChild(p)
 
-                // check if suggBox don't have same strings
-                if (!arr.includes(value)) {
-                    arr.push(value)
-                    suggBox.appendChild(listItem);
-                }
-            })
+                arr = []
+                data.forEach((value, i) => {
+                    let listItem = document.createElement('li');
+                    listItem.setAttribute("onclick", `suggestion("` + value + `")`);
+                    listItem.innerHTML = value;
+
+                    // check if suggBox don't have same strings
+                    if (!arr.includes(value)) {
+                        arr.push(value)
+                        suggBox.appendChild(listItem);
+                    }
+                })
+            }
+
         }
 
         searchWrapper.classList.add("active")
