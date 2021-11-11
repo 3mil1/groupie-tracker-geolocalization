@@ -26,35 +26,42 @@ function suggestions(data) {
 
 
     let arr;
-    if (!Array.isArray(data)) {
-        for (const [key, value] of Object.entries(data)) {
-            let listItem = document.createElement('li');
-            listItem.setAttribute("onclick", "result(" + key + ")");
-            listItem.innerHTML = value;
-            suggBox.appendChild(listItem);
-        }
-    } else {
-        // Did you mean: text
-        let p = document.createElement('p')
-        p.innerText = "Did you mean: "
-        p.className = "didMean"
-        suggBox.appendChild(p)
 
-        arr = []
-        data.forEach((value, i) => {
-            let listItem = document.createElement('li');
-            listItem.setAttribute("onclick", `suggestion("` + value + `")`);
-            listItem.innerHTML = value;
+    data.forEach((data) => {
 
-            // check if suggBox don't have same strings
-            if (!arr.includes(value)) {
-                arr.push(value)
+        if (!Array.isArray(data)) {
+            for (const [key, value] of Object.entries(data)) {
+                let listItem = document.createElement('li');
+                listItem.setAttribute("onclick", "result(" + key + ")");
+                listItem.innerHTML = value;
                 suggBox.appendChild(listItem);
             }
-        })
-    }
+        } else {
+            // Did you mean: text
+            let p = document.createElement('p')
+            p.innerText = "Did you mean: "
+            p.className = "didMean"
+            suggBox.appendChild(p)
 
-    searchWrapper.classList.add("active")
+            arr = []
+            data.forEach((value, i) => {
+                let listItem = document.createElement('li');
+                listItem.setAttribute("onclick", `suggestion("` + value + `")`);
+                listItem.innerHTML = value;
+
+                // check if suggBox don't have same strings
+                if (!arr.includes(value)) {
+                    arr.push(value)
+                    suggBox.appendChild(listItem);
+                }
+            })
+        }
+
+        searchWrapper.classList.add("active")
+
+    })
+
+
 }
 
 function result(id) {

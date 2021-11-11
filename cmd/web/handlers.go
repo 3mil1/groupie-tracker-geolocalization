@@ -68,6 +68,7 @@ func search(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		userInput := r.URL.Query().Get("a")
+		//fmt.Println(searchInsideStruct(artistsRelation, userInput))
 		json.NewEncoder(w).Encode(searchInsideStruct(artistsRelation, userInput))
 	}
 }

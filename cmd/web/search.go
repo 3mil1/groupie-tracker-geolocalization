@@ -5,23 +5,27 @@ import (
 	"strings"
 )
 
-func searchInsideStruct(artists []ArtistsRelation, userInput string) interface{} {
+func searchInsideStruct(artists []ArtistsRelation, userInput string) []interface{} {
 
-	isResult := true
-	var returnVal interface{}
+	var returnVal []interface{}
+	var returnValRES map[int]string
+	var returnValSUG []string
 
 	// result
-	returnVal, isResult = result(artists, userInput, isResult)
+	returnValRES = result(artists, userInput)
 
 	// suggestion
-	if !isResult {
-		returnVal = suggestion(artists, userInput)
-	}
+	//if !isResult {
+	returnValSUG = suggestion(artists, userInput)
+	//}
+
+	returnVal = append(returnVal, returnValRES)
+	returnVal = append(returnVal, returnValSUG)
 
 	return returnVal
 }
 
-func result(artists []ArtistsRelation, userInput string, isResult bool) (map[int]string, bool) {
+func result(artists []ArtistsRelation, userInput string) map[int]string {
 	m := make(map[int]string)
 
 	for _, r := range artists {
@@ -54,12 +58,7 @@ func result(artists []ArtistsRelation, userInput string, isResult bool) (map[int
 		}
 
 	}
-
-	if len(m) == 0 {
-		isResult = false
-	}
-
-	return m, isResult
+	return m
 }
 
 func suggestion(artists []ArtistsRelation, userInput string) []string {
