@@ -1,33 +1,14 @@
 package main
 
 import (
+	"strconv"
 	"strings"
 )
-
-type Suggestions struct {
-	ID             int                 `json:"id"`
-	Image          string              `json:"image"`
-	Name           string              `json:"name"`
-	Members        []string            `json:"members"`
-	CreationDate   int                 `json:"creationDate"`
-	FirstAlbum     string              `json:"firstAlbum"`
-	DatesLocations map[string][]string `json:"relationsSlice"`
-}
-
-var suggestions Suggestions
 
 func searchInsideStruct(artists []ArtistsRelation, userInput string) interface{} {
 
 	isResult := true
 	var returnVal interface{}
-
-	//for _, member := range r.Members {
-	//	if strings.HasPrefix(strings.ToLower(strings.TrimSpace(member)), strings.ToLower(userInput)) {
-	//		m[r.ID] = member + " -> member"
-	//		members := []string{member}
-	//		suggestions.add(members)
-	//	}
-	//}
 
 	// result
 	returnVal, isResult = result(artists, userInput, isResult)
@@ -36,9 +17,6 @@ func searchInsideStruct(artists []ArtistsRelation, userInput string) interface{}
 	if !isResult {
 		returnVal = suggestion(artists, userInput)
 	}
-
-	//data, _ := json.Marshal(suggestions)
-	//fmt.Println(string(data))
 
 	return returnVal
 }
@@ -59,6 +37,20 @@ func result(artists []ArtistsRelation, userInput string, isResult bool) (map[int
 			if correctLocations == userInput {
 				m[r.ID] = r.Name
 			}
+		}
+
+		for _, member := range r.Members {
+			if member == userInput {
+				m[r.ID] = r.Name
+			}
+		}
+
+		if strconv.Itoa(r.CreationDate) == userInput {
+			m[r.ID] = r.Name
+		}
+
+		if r.FirstAlbum == userInput {
+			m[r.ID] = r.Name
 		}
 
 	}
@@ -84,10 +76,24 @@ func suggestion(artists []ArtistsRelation, userInput string) []string {
 				}
 			}
 		}
+
+		for _, member := range r.Members {
+			sliceOfName := strings.Fields(member)
+			for _, name := range sliceOfName {
+				if strings.HasPrefix(strings.ToLower(strings.TrimSpace(name)), strings.ToLower(userInput)) {
+					m = append(m, member)
+				}
+			}
+		}
+
+		if strings.HasPrefix(strings.ToLower(strings.TrimSpace(strconv.Itoa(r.CreationDate))), strings.ToLower(userInput)) {
+			m = append(m, strconv.Itoa(r.CreationDate))
+		}
+
+		if strings.HasPrefix(strings.ToLower(strings.TrimSpace(r.FirstAlbum)), strings.ToLower(userInput)) {
+			m = append(m, r.FirstAlbum)
+		}
+
 	}
 	return m
-}
-
-func (sugg *Suggestions) add(data []string) {
-	sugg.Members = data
 }
