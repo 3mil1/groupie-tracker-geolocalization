@@ -4,7 +4,7 @@
     <form name="search" novalidate>
       <div class="search-input">
         <input
-          type="text"
+          type="search"
           class="input"
           name="search"
           placeholder="Search"
@@ -21,15 +21,17 @@
 </div>
 
 <script>
-  let input = document.querySelector(".search-input");
+  let search = document.querySelector(".search");
 
-  input.addEventListener("focusout", () => {
+  search.addEventListener("focusout", () => {
     document.querySelector(".autocomplete").style.visibility = "hidden";
   });
 
-  input.addEventListener("focusin", () => {
+  search.addEventListener("focusin", () => {
     document.querySelector(".autocomplete").style.visibility = "visible";
   });
+
+  window.addEventListener("unload", () => {});
 </script>
 {{end}}
 
