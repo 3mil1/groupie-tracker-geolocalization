@@ -15,6 +15,7 @@ h4 {
   display: flex;
   justify-content: space-between;
   position: relative;
+  flex-direction: row;
 }
 
 .header_center {
@@ -28,6 +29,7 @@ h4 {
   right: 0;
   flex: 0;
 }
+
 
 .logo {
   margin-top: 0;
@@ -245,7 +247,13 @@ footer {
 }
 
 .box {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+.fa-search{
+    padding-left: 5px;
+    padding-top: 5px;
 }
 
 .input {
@@ -305,12 +313,14 @@ i {
   max-height: 280px;
   overflow-y: auto;
   background: #555;
+  z-index: 8;
 }
 
 .search-input.active .autocomplete {
   padding: 10px 8px;
   opacity: 1;
   pointer-events: auto;
+  z-index: 7;
 }
 
 .autocomplete li {
