@@ -23,9 +23,10 @@ func home(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	for key, value := range r.Form {
-		fmt.Println(key, value)
-	}
+
+	//for key, value := range r.Form {
+	//	fmt.Println(key, value)
+	//}
 
 	err = templates.ExecuteTemplate(w, "index", &artistsRelation)
 	if err != nil {

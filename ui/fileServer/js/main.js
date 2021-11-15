@@ -1,6 +1,6 @@
 const searchWrapper = document.querySelector(".search-input");
 const inputBox = searchWrapper.querySelector("input");
-const suggBox = searchWrapper.querySelector(".autocomplete");
+const suggBox = searchWrapper.querySelector(".autocomplete")
 
 let userInput
 inputBox.onkeyup = async (e) => {
@@ -21,9 +21,10 @@ inputBox.onkeyup = async (e) => {
     }
 }
 
+
 function suggestions(data) {
     suggBox.innerHTML = ""
-
+    let tabIndex = 0
 
     let arr;
 
@@ -33,6 +34,7 @@ function suggestions(data) {
             for (const [key, value] of Object.entries(data)) {
                 let listItem = document.createElement('li');
                 listItem.setAttribute("onclick", "result(" + key + ")");
+                listItem.setAttribute("tabindex", tabIndex);
                 listItem.innerHTML = value;
                 suggBox.appendChild(listItem);
             }
@@ -49,6 +51,7 @@ function suggestions(data) {
                 data.forEach((value, i) => {
                     let listItem = document.createElement('li');
                     listItem.setAttribute("onclick", `suggestion("` + value + `")`);
+                    listItem.setAttribute("tabindex", tabIndex);
                     listItem.innerHTML = value;
 
                     // check if suggBox don't have same strings
@@ -62,7 +65,6 @@ function suggestions(data) {
         }
 
         searchWrapper.classList.add("active")
-
     })
 
 
@@ -80,5 +82,32 @@ function suggestion(x) {
     }));
 }
 
+document.addEventListener("keydown", function (evt) {
+    if (evt.ctrlKey && evt.key === 's') {
+        inputBox.focus()
+    }
+    getSelectedElement(evt)
+});
 
 
+const getSelectedElement = (evt) => {
+    if (suggBox.contains(document.activeElement)) {
+        if (evt.key === 'Enter') {
+            Function("return " + document.activeElement.getAttribute("onclick"))()
+        }
+    }
+}
+
+
+inputBox.addEventListener("focusin", function (evt) {
+    el = document.querySelector("i")
+    if (inputBox === document.activeElement || inputBox.value.length !== 0) {
+        el.classList.add("disable")
+    }
+})
+inputBox.addEventListener("focusout", function (evt) {
+    el = document.querySelector("i")
+    if (inputBox !== document.activeElement && inputBox.value.length === 0) {
+        el.classList.remove("disable")
+    }
+})
