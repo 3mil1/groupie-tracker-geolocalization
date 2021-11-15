@@ -28,11 +28,28 @@ func result(artists []ArtistsRelation, userInput string) map[int]string {
 	m := make(map[int]string)
 
 	for _, r := range artists {
-		sliceOfName := strings.Fields(r.Name)
-		for _, name := range sliceOfName {
-			if strings.HasPrefix(strings.ToLower(strings.TrimSpace(name)), strings.ToLower(userInput)) {
-				m[r.ID] = r.Name
+		if strings.Contains(strings.ToLower(strings.TrimSpace(r.Name)), strings.ToLower(userInput)) {
+
+			if strings.Index(strings.ToLower(strings.TrimSpace(r.Name)), strings.ToLower(userInput)) > 1 {
+				if string(r.Name[strings.Index(strings.ToLower(strings.TrimSpace(r.Name)), strings.ToLower(userInput))-1]) == " " {
+					m[r.ID] = r.Name
+				}
 			}
+
+			if strings.Index(strings.ToLower(strings.TrimSpace(r.Name)), strings.ToLower(userInput)) < 1 {
+				if strings.Contains(strings.ToLower(strings.TrimSpace(r.Name)), strings.ToLower(userInput)) {
+					m[r.ID] = r.Name
+				}
+			}
+
+			//sliceOfName := strings.Fields(r.Name)
+			//
+			//for _, name := range sliceOfName {
+			//	if strings.HasPrefix(strings.ToLower(strings.TrimSpace(name)), strings.ToLower(userInput)) {
+			//		m[r.ID] = r.Name
+			//	}
+			//}
+
 		}
 
 		for location := range r.DatesLocations {
