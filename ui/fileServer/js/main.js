@@ -71,7 +71,7 @@ function suggestions(data) {
 }
 
 function result(id) {
-    window.location.href = "http://localhost:8080/artist?id=" + id;
+    window.location.href = "/artist?id=" + id;
 }
 
 function suggestion(x) {
