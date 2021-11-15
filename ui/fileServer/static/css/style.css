@@ -368,7 +368,7 @@ i {
     color: white;
 }
 
-@media (max-device-width: 1200px) {
+@media (max-width: 1200px) {
   .header_right {
       position: relative;
   }
@@ -380,5 +380,8 @@ i {
   }
   .search-container{
     margin-right: 0;
+  }
+  #card-artist{
+    top: 150px;
   }
 }
