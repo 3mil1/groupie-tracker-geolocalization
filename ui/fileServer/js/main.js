@@ -3,6 +3,7 @@ const inputBox = searchWrapper.querySelector("input");
 const suggBox = searchWrapper.querySelector(".autocomplete")
 
 let userInput
+let d
 inputBox.onkeyup = async (e) => {
     userInput = e.target.value;
     if (userInput) {
@@ -32,6 +33,7 @@ function suggestions(data) {
 
         if (!Array.isArray(data)) {
             for (const [key, value] of Object.entries(data)) {
+                d = data
                 let listItem = document.createElement('li');
                 listItem.setAttribute("onclick", "result(" + key + ")");
                 listItem.setAttribute("tabindex", tabIndex);
@@ -111,3 +113,19 @@ inputBox.addEventListener("focusout", function (evt) {
         el.classList.remove("disable")
     }
 })
+
+
+// if press key enter and focus in input
+inputBox.addEventListener("keydown", function (evt) {
+    if (evt.key === 'Enter') {
+        evt.preventDefault();
+
+        for (const [key, value] of Object.entries(d)) {
+            if (userInput.toLowerCase() === value.toLowerCase()) {
+                result(key)
+            }
+        }
+    }
+
+}, false)
+

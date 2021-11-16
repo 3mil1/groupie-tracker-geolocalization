@@ -1,36 +1,37 @@
 {{define "search-bar"}}
 <div class="search-container">
-  <div class="box">
-    <form name="search" novalidate>
-      <div class="search-input">
-        <input
-          type="search"
-          class="input"
-          name="search"
-          autocomplete="off"
-          required
-        />
-        <div class="autocomplete">
-          <li></li>
-        </div>
-      </div>
-    </form>
-  </div>
-  <i class="fas fa-search"></i>
+    <div class="box">
+        <form name="search" novalidate>
+            <div class="search-input">
+                <input
+                        type="search"
+                        class="input"
+                        name="search"
+                        autocomplete="off"
+                        required
+                />
+                <div class="autocomplete">
+                    <li></li>
+                </div>
+            </div>
+        </form>
+    </div>
+    <i class="fas fa-search"></i>
 </div>
 
 <script>
-  let search = document.querySelector(".search");
+    let search = document.querySelector(".search");
 
-  search.addEventListener("focusout", () => {
-    document.querySelector(".autocomplete").style.visibility = "hidden";
-  });
+    search.addEventListener("focusout", () => {
+        document.querySelector(".autocomplete").style.visibility = "hidden";
+    });
 
-  search.addEventListener("focusin", () => {
-    document.querySelector(".autocomplete").style.visibility = "visible";
-  });
+    search.addEventListener("focusin", () => {
+        document.querySelector(".autocomplete").style.visibility = "visible";
+    });
 
-  window.addEventListener("unload", () => {});
+    window.addEventListener("unload", () => {
+    });
 </script>
 {{end}}
 
