@@ -25,7 +25,7 @@
         <div>
             <h2>Best Concerts</h2>
             {{ range $location, $date := .DatesLocations }}
-            <p><strong>{{ $location }}</strong>:</p>
+            <p><strong class="location">{{ $location }}</strong>:</p>
 
             <ul>
                 {{ range $i, $v := $date }}
@@ -34,7 +34,15 @@
             </ul>
             {{ end }}
         </div>
+
     </div>
+    <div style="margin: 20px 0">
+        {{ template "map" }}
+    </div>
+
 </div>
+
+
+
 {{ template "footer" }}
 {{ end }}

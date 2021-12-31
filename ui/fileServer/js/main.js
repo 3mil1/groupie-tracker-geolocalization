@@ -129,3 +129,42 @@ inputBox.addEventListener("keydown", function (evt) {
 
 }, false)
 
+const locations = document.querySelectorAll(".location")
+
+
+var res = [];
+
+async function initMap() {
+    const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 2,
+        center: new google.maps.LatLng(2.8, -187.3),
+    });
+    geocoder = new google.maps.Geocoder();
+
+    const timer = ms => new Promise(res => setTimeout(res, ms))
+
+    async function load() { // We need to wrap the loop into an async function for this to work
+        for (i = 0; i < locations.length; i++) {
+            geocoder.geocode({address: locations[i].textContent}).then(result => {
+                const {results} = result;
+                res.push(JSON.parse(JSON.stringify(results[0].geometry.location, null, 2)))
+            })
+            await timer(1000); // then the created Promise can be awaited
+
+            let bounds = new google.maps.LatLngBounds()
+            const markers = res.map((position, i) => {
+                const marker = new google.maps.Marker({
+                    position,
+                });
+                bounds.extend(position)
+                return marker;
+            });
+            new markerClusterer.MarkerClusterer({map, markers});
+            map.fitBounds(bounds);
+        }
+    }
+    load();
+
+}
+
+initMap()

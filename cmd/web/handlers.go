@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"regexp"
+	"server/cmd/pkg"
 	"strconv"
 	"strings"
 )
@@ -43,6 +44,8 @@ func artistPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//googleMapSlice(artistsRelation[id-1].DatesLocations)
+
 	changeKeyInMap(artistsRelation[id-1].DatesLocations)
 
 	err = templates.ExecuteTemplate(w, "artist", artistsRelation[id-1])
@@ -55,6 +58,7 @@ func artistPage(w http.ResponseWriter, r *http.Request) {
 
 // from los_angeles-usa to Los Angeles - Usa:
 func changeKeyInMap(dataMap map[string][]string) {
+
 	space := regexp.MustCompile(`\s+`)
 
 	for i, e := range dataMap {
@@ -65,6 +69,19 @@ func changeKeyInMap(dataMap map[string][]string) {
 	}
 }
 
+func googleMapSlice(dataMap map[string][]string) []interface{} {
+	var SGMap []interface{}
+
+	for i := range dataMap {
+		var GMap Map
+		pkg.JsonFromAPI("https://maps.googleapis.com/maps/api/geocode/json?address="+i+"&key=AIzaSyC4IMt9zKp20yjBhUZBMhA0qlqcQjau0dY&callback", &GMap)
+		fmt.Println(GMap)
+		SGMap = append(SGMap, GMap.AddressComponents[0].Geometry.Location)
+	}
+
+	return SGMap
+}
+
 func search(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
@@ -72,4 +89,15 @@ func search(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println(searchInsideStruct(artistsRelation, userInput))
 		json.NewEncoder(w).Encode(searchInsideStruct(artistsRelation, userInput))
 	}
+}
+
+type Map struct {
+	AddressComponents []struct {
+		Geometry struct {
+			Location struct {
+				Lat float64 `json:"lat"`
+				Lng float64 `json:"lng"`
+			} `json:"location"`
+		} `json:"geometry"`
+	} `json:"results"`
 }
