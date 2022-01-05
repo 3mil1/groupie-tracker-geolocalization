@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"regexp"
-	"server/cmd/pkg"
 	"strconv"
 	"strings"
 )
@@ -16,7 +15,7 @@ var templates = template.Must(template.ParseGlob("./ui/html/*"))
 
 func home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		http.NotFound(w, r)
+		errorHandler(w, r, http.StatusNotFound)
 		return
 	}
 
@@ -24,10 +23,6 @@ func home(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	//for key, value := range r.Form {
-	//	fmt.Println(key, value)
-	//}
 
 	err = templates.ExecuteTemplate(w, "index", &artistsRelation)
 	if err != nil {
@@ -40,11 +35,9 @@ func home(w http.ResponseWriter, r *http.Request) {
 func artistPage(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil || id < 1 || id > 52 {
-		http.NotFound(w, r)
+		errorHandler(w, r, http.StatusNotFound)
 		return
 	}
-
-	//googleMapSlice(artistsRelation[id-1].DatesLocations)
 
 	changeKeyInMap(artistsRelation[id-1].DatesLocations)
 
@@ -53,6 +46,19 @@ func artistPage(w http.ResponseWriter, r *http.Request) {
 		log.Println(err.Error())
 		http.Error(w, "Internal Server Error", 500)
 		return
+	}
+}
+
+func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
+	w.WriteHeader(status)
+
+	if status == http.StatusNotFound {
+		err := templates.ExecuteTemplate(w, "page404", nil)
+		if err != nil {
+			log.Println(err.Error())
+			http.Error(w, "Internal Server Error", 500)
+			return
+		}
 	}
 }
 
@@ -69,19 +75,6 @@ func changeKeyInMap(dataMap map[string][]string) {
 	}
 }
 
-func googleMapSlice(dataMap map[string][]string) []interface{} {
-	var SGMap []interface{}
-
-	for i := range dataMap {
-		var GMap Map
-		pkg.JsonFromAPI("https://maps.googleapis.com/maps/api/geocode/json?address="+i+"&key=AIzaSyC4IMt9zKp20yjBhUZBMhA0qlqcQjau0dY&callback", &GMap)
-		fmt.Println(GMap)
-		SGMap = append(SGMap, GMap.AddressComponents[0].Geometry.Location)
-	}
-
-	return SGMap
-}
-
 func search(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
@@ -89,15 +82,4 @@ func search(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println(searchInsideStruct(artistsRelation, userInput))
 		json.NewEncoder(w).Encode(searchInsideStruct(artistsRelation, userInput))
 	}
-}
-
-type Map struct {
-	AddressComponents []struct {
-		Geometry struct {
-			Location struct {
-				Lat float64 `json:"lat"`
-				Lng float64 `json:"lng"`
-			} `json:"location"`
-		} `json:"geometry"`
-	} `json:"results"`
 }
